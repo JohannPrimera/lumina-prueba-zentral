@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { LuminaLogoComponent } from '../../shared/components/lumina-logo/lumina-logo.component';
 import { NotificacionesComponent } from '../../shared/components/notificaciones/notificaciones.component';
@@ -17,6 +17,7 @@ interface ItemMenuDocente {
   selector: 'app-panel-docente-layout',
   standalone: true,
   imports: [RouterOutlet, RouterLink, RouterLinkActive, LuminaLogoComponent, NotificacionesComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './panel-docente-layout.component.html',
 })
 export class PanelDocenteLayoutComponent {

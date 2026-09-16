@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Modulo, PestanaPanelPreview } from '../../landing.models';
 import { PanelPreviewComponent } from '../panel-preview/panel-preview.component';
 
@@ -6,6 +6,7 @@ import { PanelPreviewComponent } from '../panel-preview/panel-preview.component'
   selector: 'app-modulos-section',
   standalone: true,
   imports: [PanelPreviewComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <section id="modulos" class="scroll-mt-4 px-5 py-20 sm:px-10 lg:py-28">
       <div class="mx-auto max-w-[1286px]">

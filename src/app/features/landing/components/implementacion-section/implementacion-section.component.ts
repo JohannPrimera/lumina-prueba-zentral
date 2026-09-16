@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { PasoImplementacion } from '../../landing.models';
 
 @Component({
   selector: 'app-implementacion-section',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <section id="implementacion" class="scroll-mt-4 px-5 pb-24 sm:px-10">
       <div class="mx-auto max-w-[1286px]">

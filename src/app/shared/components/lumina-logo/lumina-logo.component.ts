@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 /** Logotipo textual de Lúmina. Reutilizado en la landing y en el panel del docente. */
 @Component({
   selector: 'app-lumina-logo',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <span class="block leading-none">
       <span class="block font-display text-[22px] tracking-wide" [class.text-white]="invertido">LÚMINA</span>

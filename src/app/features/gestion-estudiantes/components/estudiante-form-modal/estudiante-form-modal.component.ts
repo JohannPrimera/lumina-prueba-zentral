@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges, inject } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges, inject, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Estudiante, EstadoEstudiante, EstudianteFormValue, NivelEscolar } from '../../../../core/models/estudiante.model';
@@ -49,6 +49,7 @@ const MENSAJES_GENERALES: Record<string, string> = {
   selector: 'app-estudiante-form-modal',
   standalone: true,
   imports: [ReactiveFormsModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './estudiante-form-modal.component.html',
 })
 export class EstudianteFormModalComponent implements OnChanges {

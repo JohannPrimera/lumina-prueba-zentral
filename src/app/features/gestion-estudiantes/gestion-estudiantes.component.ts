@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Estudiante, EstudianteFormValue, NivelEscolar } from '../../core/models/estudiante.model';
 import { mensajeDeError } from '../../core/http/mensaje-error';
 import { NotificacionesService } from '../../shared/services/notificaciones.service';
@@ -18,6 +18,7 @@ import { ConfirmarEliminarModalComponent } from './components/confirmar-eliminar
   selector: 'app-gestion-estudiantes',
   standalone: true,
   imports: [EstudiantesFiltrosComponent, EstudiantesTablaComponent, EstudianteFormModalComponent, ConfirmarEliminarModalComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './gestion-estudiantes.component.html',
 })
 export class GestionEstudiantesComponent {

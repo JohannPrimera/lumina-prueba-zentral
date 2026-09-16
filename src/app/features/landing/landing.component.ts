@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { EstadoSolicitudDemo } from './landing.models';
 import {
   ENLACES_NAVEGACION,
@@ -40,6 +40,7 @@ import { LandingFooterComponent } from './components/landing-footer/landing-foot
     DemoCtaSectionComponent,
     LandingFooterComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <div class="min-h-screen overflow-x-hidden bg-lumina-fondo text-lumina-tinta">
       <app-landing-header [enlaces]="enlaces" />

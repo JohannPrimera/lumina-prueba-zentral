@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Testimonio } from '../../landing.models';
 
 @Component({
   selector: 'app-testimonio-section',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <section class="px-5 py-20 sm:px-10 lg:py-28" aria-label="Testimonio">
       <figure class="mx-auto max-w-5xl">

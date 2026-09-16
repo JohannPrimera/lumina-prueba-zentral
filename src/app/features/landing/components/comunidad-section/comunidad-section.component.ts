@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { RolComunidad, TonoTarjeta } from '../../landing.models';
@@ -7,6 +7,7 @@ import { RolComunidad, TonoTarjeta } from '../../landing.models';
   selector: 'app-comunidad-section',
   standalone: true,
   imports: [NgClass, RouterLink],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './comunidad-section.component.html',
 })
 export class ComunidadSectionComponent {

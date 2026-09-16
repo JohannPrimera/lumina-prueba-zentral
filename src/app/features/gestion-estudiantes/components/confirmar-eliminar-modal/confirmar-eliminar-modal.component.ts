@@ -1,9 +1,10 @@
-import { Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { Estudiante } from '../../../../core/models/estudiante.model';
 
 @Component({
   selector: 'app-confirmar-eliminar-modal',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './confirmar-eliminar-modal.component.html',
 })
 export class ConfirmarEliminarModalComponent implements OnChanges {

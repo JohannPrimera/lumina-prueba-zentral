@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { Estudiante, NivelEscolar } from '../../../../core/models/estudiante.model';
 import { EdadPipe } from '../../../../shared/pipes/edad.pipe';
 
@@ -6,6 +6,7 @@ import { EdadPipe } from '../../../../shared/pipes/edad.pipe';
   selector: 'app-estudiantes-tabla',
   standalone: true,
   imports: [EdadPipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './estudiantes-tabla.component.html',
 })
 export class EstudiantesTablaComponent {

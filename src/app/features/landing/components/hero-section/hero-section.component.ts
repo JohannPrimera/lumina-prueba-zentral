@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EstadoSolicitudDemo } from '../../landing.models';
 
@@ -6,6 +6,7 @@ import { EstadoSolicitudDemo } from '../../landing.models';
   selector: 'app-hero-section',
   standalone: true,
   imports: [ReactiveFormsModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './hero-section.component.html',
 })
 export class HeroSectionComponent {

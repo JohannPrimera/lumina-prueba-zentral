@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-demo-cta-section',
   standalone: true,
   imports: [RouterLink],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <section id="demo" class="scroll-mt-4 border-y-[3px] border-lumina-tinta bg-lumina-lima px-5 py-20 sm:px-10 lg:py-28">
       <div class="mx-auto max-w-4xl">

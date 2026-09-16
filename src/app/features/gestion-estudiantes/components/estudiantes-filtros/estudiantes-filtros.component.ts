@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { NivelEscolar } from '../../../../core/models/estudiante.model';
 
 export interface OpcionFiltro<T extends string> {
@@ -11,6 +11,7 @@ export interface OpcionFiltro<T extends string> {
 @Component({
   selector: 'app-estudiantes-filtros',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './estudiantes-filtros.component.html',
 })
 export class EstudiantesFiltrosComponent {

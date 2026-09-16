@@ -1,4 +1,4 @@
-import { Component, Input, computed, signal } from '@angular/core';
+import { Component, Input, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { PestanaPanelPreview, TonoIndicador } from '../../landing.models';
 
@@ -7,6 +7,7 @@ import { PestanaPanelPreview, TonoIndicador } from '../../landing.models';
   selector: 'app-panel-preview',
   standalone: true,
   imports: [NgClass],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './panel-preview.component.html',
 })
 export class PanelPreviewComponent {

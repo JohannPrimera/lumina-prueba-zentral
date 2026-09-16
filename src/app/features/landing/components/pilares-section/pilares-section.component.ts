@@ -1,8 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-pilares-section',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <section class="mt-12 bg-lumina-noche px-5 py-10 text-white sm:px-10" aria-label="Por qué Lúmina">
       <ul class="mx-auto grid max-w-[1286px] gap-6 md:grid-cols-3 md:gap-0">

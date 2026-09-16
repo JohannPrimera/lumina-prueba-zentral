@@ -1,4 +1,4 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, Input, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { EnlaceNavegacion } from '../../landing.models';
 import { LuminaLogoComponent } from '../../../../shared/components/lumina-logo/lumina-logo.component';
@@ -7,6 +7,7 @@ import { LuminaLogoComponent } from '../../../../shared/components/lumina-logo/l
   selector: 'app-landing-header',
   standalone: true,
   imports: [RouterLink, LuminaLogoComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './landing-header.component.html',
 })
 export class LandingHeaderComponent {

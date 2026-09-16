@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { EnlaceNavegacion } from '../../landing.models';
 import { LuminaLogoComponent } from '../../../../shared/components/lumina-logo/lumina-logo.component';
@@ -7,6 +7,7 @@ import { LuminaLogoComponent } from '../../../../shared/components/lumina-logo/l
   selector: 'app-landing-footer',
   standalone: true,
   imports: [RouterLink, LuminaLogoComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <footer class="px-5 py-10 sm:px-10">
       <div class="mx-auto flex max-w-[1286px] flex-wrap items-center justify-between gap-6">
