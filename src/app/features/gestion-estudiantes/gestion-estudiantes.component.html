@@ -1,0 +1,91 @@
+<section class="px-4 py-8 sm:px-8 lg:py-10">
+  <div class="mx-auto flex max-w-6xl flex-col gap-5">
+    <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div class="flex flex-col gap-1">
+        <p class="text-xs font-bold uppercase tracking-[0.26em] text-lumina-violeta">Panel del docente</p>
+        <h1 class="font-display text-3xl uppercase text-lumina-tinta sm:text-4xl">Gestión de estudiantes</h1>
+        <p class="text-sm text-lumina-texto">
+          @if (gradoSeleccionado(); as grado) {
+            Aula <strong class="text-lumina-tinta">{{ grado }} · {{ nivelSeleccionado() }}</strong>: busque, filtre, agregue y edite a sus estudiantes.
+          } @else {
+            Administre el listado de sus aulas: busque, filtre, agregue y edite a sus estudiantes.
+          }
+        </p>
+      </div>
+      <button
+        type="button"
+        (click)="abrirCrear()"
+        class="self-start whitespace-nowrap rounded-full border-[2.5px] border-lumina-tinta bg-lumina-lima px-5 py-3 text-xs font-bold uppercase tracking-wide text-lumina-tinta transition hover:bg-lumina-lima-claro sm:self-auto"
+      >
+        + Nuevo estudiante
+      </button>
+    </header>
+
+    <app-estudiantes-filtros
+      [texto]="textoBusqueda()"
+      [niveles]="opcionesNivel()"
+      [nivelSeleccionado]="nivelSeleccionado()"
+      [grados]="opcionesGrado()"
+      [gradoSeleccionado]="gradoSeleccionado()"
+      [hayFiltros]="hayFiltros()"
+      (textoCambio)="textoBusqueda.set($event)"
+      (nivelCambio)="cambiarNivel($event)"
+      (gradoCambio)="gradoSeleccionado.set($event)"
+      (limpiar)="limpiarFiltros()"
+    />
+
+    @if (cargando()) {
+      <div class="rounded-2xl border-[3px] border-lumina-tinta bg-white p-6" aria-busy="true" aria-live="polite">
+        <p class="sr-only">Cargando estudiantes…</p>
+        @for (fila of [1, 2, 3, 4, 5]; track fila) {
+          <div class="flex animate-pulse items-center gap-3 border-b border-lumina-tinta/10 py-3 last:border-b-0">
+            <span class="h-9 w-9 rounded-full bg-lumina-fondo"></span>
+            <span class="h-3 w-48 rounded-full bg-lumina-fondo"></span>
+            <span class="ml-auto h-3 w-24 rounded-full bg-lumina-fondo"></span>
+          </div>
+        }
+      </div>
+    } @else if (errorCarga()) {
+      <div class="rounded-2xl border-[3px] border-lumina-tinta bg-white px-6 py-10 text-center" role="alert">
+        <p class="font-display text-xl uppercase text-lumina-tinta">No se pudo cargar el listado</p>
+        <p class="mt-1 text-sm text-lumina-texto">{{ errorCarga() }}</p>
+        <button
+          type="button"
+          (click)="cargarEstudiantes()"
+          class="mt-4 rounded-full border-2 border-lumina-tinta bg-lumina-lima px-5 py-2 text-xs font-bold uppercase text-lumina-tinta"
+        >
+          Reintentar
+        </button>
+      </div>
+    } @else {
+      <p class="text-xs font-semibold text-lumina-texto" aria-live="polite">
+        Mostrando <span class="tabular-nums text-lumina-tinta">{{ resumen().total }}</span> de
+        <span class="tabular-nums">{{ estudiantes().length }}</span> {{ estudiantes().length === 1 ? 'estudiante' : 'estudiantes' }} ·
+        <span class="tabular-nums">{{ resumen().activos }}</span> {{ resumen().activos === 1 ? 'activo' : 'activos' }}
+      </p>
+      <app-estudiantes-tabla
+        [estudiantes]="estudiantesFiltrados()"
+        [hayFiltros]="hayFiltros()"
+        (editar)="abrirEditar($event)"
+        (eliminar)="pedirConfirmacionEliminar($event)"
+        (limpiarFiltros)="limpiarFiltros()"
+      />
+    }
+  </div>
+</section>
+
+<app-estudiante-form-modal
+  [abierto]="modalFormularioAbierto()"
+  [estudiante]="estudianteEnEdicion()"
+  [guardando]="guardando()"
+  [errorServidor]="errorGuardado()"
+  (guardar)="guardarEstudiante($event)"
+  (cancelar)="cerrarFormulario()"
+/>
+
+<app-confirmar-eliminar-modal
+  [estudiante]="estudianteAEliminar()"
+  [eliminando]="eliminando()"
+  (confirmar)="confirmarEliminar()"
+  (cancelar)="cancelarEliminar()"
+/>

@@ -1,0 +1,106 @@
+<section id="inicio" class="scroll-mt-4 px-5 sm:px-10">
+  <div
+    class="relative mx-auto grid max-w-[1286px] grid-cols-[minmax(0,1fr)] items-center gap-10 overflow-hidden rounded-[26px] border-[3px] border-lumina-tinta bg-white px-6 py-12 sm:px-12 sm:py-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:py-20"
+  >
+    <div class="min-w-0">
+      <h1 class="font-display uppercase leading-[0.86] text-lumina-tinta">
+        <span class="block text-[clamp(56px,11vw,150px)] tracking-[-0.01em]">Aprender</span>
+        <span
+          class="mt-2 block font-serif text-[clamp(56px,11vw,150px)] normal-case italic leading-[1] tracking-[-0.02em] text-lumina-violeta"
+        >
+          jugando<span
+            class="ml-1 inline-block h-[0.12em] w-[0.12em] rounded-full border-[0.03em] border-lumina-tinta bg-lumina-lima align-baseline"
+            aria-hidden="true"
+          ></span>
+        </span>
+      </h1>
+
+      <p class="mt-8 max-w-[34rem] text-lg font-medium leading-relaxed text-lumina-tinta sm:text-[19px]">
+        Pagos, asistencia, evaluaciones y prácticas en una sola plataforma, instalada de preescolar a bachillerato con
+        los niveles, grupos y costos reales de su institución.
+      </p>
+
+      @if (estadoSolicitud === 'enviada') {
+        <div
+          class="mt-8 max-w-[34rem] rounded-2xl border-[3px] border-lumina-tinta bg-lumina-lima px-5 py-4 text-lumina-tinta"
+          role="status"
+        >
+          <p class="font-display text-xl uppercase">¡Solicitud recibida!</p>
+          <p class="mt-1 text-sm font-medium">Le escribimos en un día hábil para coordinar la demostración.</p>
+        </div>
+      } @else {
+        <form class="mt-8 max-w-[36rem]" [formGroup]="formulario" (ngSubmit)="enviar()" novalidate>
+          <label
+            for="correo-demo"
+            class="mb-2 block text-[11px] font-bold uppercase tracking-[0.12em] text-lumina-tinta"
+          >
+            Correo institucional
+          </label>
+          <div class="flex flex-col gap-3 sm:flex-row">
+            <input
+              id="correo-demo"
+              type="email"
+              formControlName="correo"
+              placeholder="direccion@sucolegio.edu"
+              autocomplete="email"
+              [attr.aria-invalid]="correoInvalido"
+              aria-describedby="nota-demo"
+              class="min-w-0 flex-1 rounded-full border-[3px] border-lumina-tinta bg-lumina-fondo px-5 py-3.5 text-base font-medium text-lumina-tinta placeholder:text-lumina-texto/70 focus:outline-none focus:ring-4 focus:ring-lumina-violeta/30"
+              [class.border-red-600]="correoInvalido"
+            />
+            <button
+              type="submit"
+              [disabled]="estadoSolicitud === 'enviando'"
+              class="rounded-full border-[3px] border-lumina-tinta bg-lumina-lima px-7 py-3.5 text-xs font-bold uppercase tracking-[0.08em] text-lumina-tinta transition hover:bg-lumina-lima-claro disabled:opacity-60"
+            >
+              {{ estadoSolicitud === 'enviando' ? 'Enviando…' : 'Solicitar demostración' }}
+            </button>
+          </div>
+          @if (correoInvalido) {
+            <p class="mt-2 text-sm font-semibold text-red-600">Ingrese un correo institucional válido.</p>
+          }
+          <p id="nota-demo" class="mt-3 max-w-[30rem] text-sm text-lumina-texto">
+            Demostración de 30 minutos con su equipo directivo. Respondemos en un día hábil.
+          </p>
+        </form>
+      }
+    </div>
+
+    <!-- Ilustración "Aprender jugando": libro abierto + bandera de logro -->
+    <div class="relative mx-auto hidden w-full max-w-[420px] sm:block" aria-hidden="true">
+      <svg viewBox="0 0 420 430" fill="none" class="animar-flotar h-auto w-full">
+        <path d="M290 175V38" stroke="#241E3D" stroke-width="9" stroke-linecap="round" />
+        <path d="M290 40h122l-34 38 34 38H290z" fill="#B4E61D" stroke="#241E3D" stroke-width="8" stroke-linejoin="round" />
+        <path d="M318 72h62" stroke="#241E3D" stroke-width="7" stroke-linecap="round" />
+        <path
+          d="M140 170c-22-26-12-68 26-70 32-2 44 26 28 42-10 10-24 6-28 20-4 16-14 20-26 8z"
+          fill="#B4E61D"
+          stroke="#241E3D"
+          stroke-width="8"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M42 220c55-32 115-34 168 2v168c-52-34-112-34-164-8z"
+          fill="#F3F1FB"
+          stroke="#241E3D"
+          stroke-width="9"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M210 222c52-36 112-34 166-4l4 162c-52-28-114-26-170 10z"
+          fill="#5B3AE0"
+          stroke="#241E3D"
+          stroke-width="9"
+          stroke-linejoin="round"
+        />
+        <path d="M78 262c38-16 78-12 104 6M78 302c38-16 78-12 104 6M82 342c26-10 52-10 76 2" stroke="#241E3D" stroke-width="7" stroke-linecap="round" />
+        <path d="M238 266c30-18 70-20 104-8M238 306c30-18 70-20 104-8" stroke="#F3F1FB" stroke-width="7" stroke-linecap="round" />
+      </svg>
+      <span
+        class="absolute bottom-2 left-0 -rotate-[8deg] rounded-full border-[3px] border-lumina-tinta bg-lumina-violeta px-4 py-2 text-[11px] font-bold uppercase tracking-[0.1em] text-white sm:text-xs"
+      >
+        Preescolar a bachillerato
+      </span>
+    </div>
+  </div>
+</section>

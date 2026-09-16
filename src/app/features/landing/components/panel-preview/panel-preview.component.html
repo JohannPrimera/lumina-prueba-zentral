@@ -1,0 +1,77 @@
+<div class="overflow-hidden rounded-[22px] border-[3px] border-lumina-tinta bg-white">
+  <div class="flex items-center justify-between gap-3 px-6 py-4">
+    <p class="font-display text-lg uppercase text-lumina-tinta">Panel de dirección</p>
+    <span class="rounded-full border-2 border-lumina-tinta px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em]">
+      Datos de ejemplo
+    </span>
+  </div>
+
+  <div class="grid grid-cols-2 border-y-[3px] border-lumina-tinta bg-lumina-fondo" role="tablist" aria-label="Vista previa">
+    @for (pestana of lista(); track pestana.id) {
+      <button
+        type="button"
+        role="tab"
+        [id]="'tab-' + pestana.id"
+        [attr.aria-selected]="pestana.id === idActiva()"
+        aria-controls="panel-preview-contenido"
+        (click)="seleccionar(pestana.id)"
+        class="relative border-l-[3px] border-lumina-tinta py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] text-lumina-tinta transition first:border-l-0 hover:bg-white"
+        [class.bg-white]="pestana.id === idActiva()"
+      >
+        {{ pestana.etiqueta }}
+        @if (pestana.id === idActiva()) {
+          <span class="absolute inset-x-4 bottom-0 h-1 bg-lumina-violeta" aria-hidden="true"></span>
+        }
+      </button>
+    }
+  </div>
+
+  @if (pestanaActiva(); as pestana) {
+    <div id="panel-preview-contenido" role="tabpanel" [attr.aria-labelledby]="'tab-' + pestana.id" class="px-6 pb-6 pt-6">
+      <div class="grid grid-cols-3 gap-3">
+        @for (indicador of pestana.indicadores; track indicador.etiqueta) {
+          <div class="rounded-xl border-[3px] border-lumina-tinta px-3 py-3 sm:px-4" [ngClass]="claseIndicador(indicador.tono)">
+            <p class="font-display text-2xl sm:text-3xl">{{ indicador.valor }}</p>
+            <p class="mt-1 text-[10px] font-bold uppercase tracking-[0.1em] opacity-80">{{ indicador.etiqueta }}</p>
+          </div>
+        }
+      </div>
+
+      <p class="mt-6 text-[10px] font-bold uppercase tracking-[0.12em] text-lumina-texto">{{ pestana.tituloBarras }}</p>
+      <ul class="mt-2 flex flex-col gap-3">
+        @for (barra of pestana.barras; track barra.etiqueta) {
+          <li>
+            <div class="mb-1 flex justify-between text-sm font-medium">
+              <span>{{ barra.etiqueta }}</span>
+              <span>{{ barra.porcentaje }}%</span>
+            </div>
+            <div
+              class="h-4 overflow-hidden rounded-full border-2 border-lumina-tinta bg-lumina-fondo"
+              role="progressbar"
+              [attr.aria-valuenow]="barra.porcentaje"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [attr.aria-label]="barra.etiqueta"
+            >
+              <div
+                class="h-full border-r-2 border-lumina-tinta bg-lumina-lima transition-[width] duration-500"
+                [style.width.%]="barra.porcentaje"
+              ></div>
+            </div>
+          </li>
+        }
+      </ul>
+
+      <ul class="mt-6 border-t-2 border-lumina-tinta">
+        @for (fila of pestana.filas; track fila.texto) {
+          <li class="flex items-center justify-between gap-3 border-b border-lumina-tinta/20 py-3 text-sm font-medium last:border-b-0">
+            <span>{{ fila.texto }}</span>
+            <span class="rounded-full border-2 border-lumina-tinta px-2.5 py-0.5 text-[11px] font-bold" [ngClass]="claseEstado(fila.tono)">
+              {{ fila.estado }}
+            </span>
+          </li>
+        }
+      </ul>
+    </div>
+  }
+</div>

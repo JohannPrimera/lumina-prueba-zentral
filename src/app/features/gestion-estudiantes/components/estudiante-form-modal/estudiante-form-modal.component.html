@@ -1,0 +1,246 @@
+@if (abierto) {
+  <div class="fixed inset-0 z-40 flex items-start justify-center overflow-y-auto bg-lumina-tinta/50 px-4 py-6 sm:items-center" (click)="!guardando && cerrar()">
+    <div
+      class="w-full max-w-2xl rounded-2xl border-[3px] border-lumina-tinta bg-white"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="titulo-formulario"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="flex items-start justify-between gap-4 border-b-[3px] border-lumina-tinta px-6 py-5">
+        <div>
+          <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-lumina-violeta">
+            {{ esEdicion ? 'Editar datos' : 'Alta de estudiante' }}
+          </p>
+          <h2 id="titulo-formulario" class="font-display text-2xl uppercase text-lumina-tinta">
+            {{ esEdicion ? estudiante?.nombreCompleto : 'Nuevo estudiante' }}
+          </h2>
+        </div>
+        <button
+          type="button"
+          (click)="cerrar()"
+          [disabled]="guardando"
+          class="rounded-full border-2 border-lumina-tinta px-2.5 py-0.5 text-lg leading-none text-lumina-tinta hover:bg-lumina-fondo"
+          aria-label="Cerrar formulario"
+        >
+          ×
+        </button>
+      </div>
+
+      <form [formGroup]="formulario" (ngSubmit)="enviar()" novalidate class="flex flex-col gap-6 px-6 py-5">
+        <p class="text-xs text-lumina-texto">Todos los campos son obligatorios.</p>
+
+        <!-- Datos personales -->
+        <fieldset class="grid gap-4 sm:grid-cols-2">
+          <legend class="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-lumina-tinta">Datos personales</legend>
+
+          <div class="sm:col-span-2">
+            <label for="campo-nombreCompleto" class="mb-1 block text-xs font-bold text-lumina-tinta">Nombre y apellido</label>
+            <input
+              id="campo-nombreCompleto"
+              type="text"
+              formControlName="nombreCompleto"
+              autocomplete="off"
+              placeholder="p. ej. Lucía Márquez Rivas"
+              [attr.aria-invalid]="!!error('nombreCompleto')"
+              aria-describedby="error-nombreCompleto"
+              class="w-full rounded-xl border-2 px-3 py-2.5 text-sm text-lumina-tinta focus:outline-none focus:ring-4 focus:ring-lumina-violeta/20"
+              [class.border-red-600]="error('nombreCompleto')"
+              [class.border-lumina-tinta]="!error('nombreCompleto')"
+            />
+            @if (error('nombreCompleto'); as mensaje) {
+              <p id="error-nombreCompleto" class="mt-1 text-xs font-semibold text-red-600">{{ mensaje }}</p>
+            }
+          </div>
+
+          <div>
+            <label for="campo-documento" class="mb-1 block text-xs font-bold text-lumina-tinta">Documento de identidad</label>
+            <input
+              id="campo-documento"
+              type="text"
+              inputmode="numeric"
+              formControlName="documento"
+              placeholder="Solo números"
+              [attr.aria-invalid]="!!error('documento')"
+              aria-describedby="error-documento"
+              class="w-full rounded-xl border-2 px-3 py-2.5 text-sm tabular-nums text-lumina-tinta focus:outline-none focus:ring-4 focus:ring-lumina-violeta/20"
+              [class.border-red-600]="error('documento')"
+              [class.border-lumina-tinta]="!error('documento')"
+            />
+            @if (error('documento'); as mensaje) {
+              <p id="error-documento" class="mt-1 text-xs font-semibold text-red-600">{{ mensaje }}</p>
+            }
+          </div>
+
+          <div>
+            <label for="campo-fechaNacimiento" class="mb-1 block text-xs font-bold text-lumina-tinta">
+              Fecha de nacimiento
+              @if (edadCalculada !== null && edadCalculada >= 0) {
+                <span class="font-semibold text-lumina-texto">· {{ edadCalculada }} años</span>
+              }
+            </label>
+            <input
+              id="campo-fechaNacimiento"
+              type="date"
+              formControlName="fechaNacimiento"
+              [max]="fechaMaxima"
+              [attr.aria-invalid]="!!error('fechaNacimiento')"
+              aria-describedby="error-fechaNacimiento"
+              class="w-full rounded-xl border-2 px-3 py-2 text-sm text-lumina-tinta focus:outline-none focus:ring-4 focus:ring-lumina-violeta/20"
+              [class.border-red-600]="error('fechaNacimiento')"
+              [class.border-lumina-tinta]="!error('fechaNacimiento')"
+            />
+            @if (error('fechaNacimiento'); as mensaje) {
+              <p id="error-fechaNacimiento" class="mt-1 text-xs font-semibold text-red-600">{{ mensaje }}</p>
+            }
+          </div>
+        </fieldset>
+
+        <!-- Datos académicos -->
+        <fieldset class="grid gap-4 sm:grid-cols-3">
+          <legend class="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-lumina-tinta">Datos académicos</legend>
+
+          <div>
+            <label for="campo-nivel" class="mb-1 block text-xs font-bold text-lumina-tinta">Nivel</label>
+            <select
+              id="campo-nivel"
+              formControlName="nivel"
+              class="w-full rounded-xl border-2 border-lumina-tinta bg-white px-3 py-2.5 text-sm text-lumina-tinta focus:outline-none focus:ring-4 focus:ring-lumina-violeta/20"
+            >
+              @for (nivel of niveles; track nivel) {
+                <option [value]="nivel">{{ nivel }}</option>
+              }
+            </select>
+          </div>
+
+          <div>
+            <label for="campo-grado" class="mb-1 block text-xs font-bold text-lumina-tinta">Aula (grado y sección)</label>
+            <select
+              id="campo-grado"
+              formControlName="grado"
+              [attr.aria-invalid]="!!error('grado')"
+              aria-describedby="error-grado"
+              class="w-full rounded-xl border-2 bg-white px-3 py-2.5 text-sm text-lumina-tinta focus:outline-none focus:ring-4 focus:ring-lumina-violeta/20"
+              [class.border-red-600]="error('grado')"
+              [class.border-lumina-tinta]="!error('grado')"
+            >
+              <option value="" disabled>Elegir…</option>
+              @for (grado of gradosDisponibles; track grado) {
+                <option [value]="grado">{{ grado }}</option>
+              }
+            </select>
+            @if (error('grado'); as mensaje) {
+              <p id="error-grado" class="mt-1 text-xs font-semibold text-red-600">{{ mensaje }}</p>
+            }
+          </div>
+
+          <div>
+            <label for="campo-estado" class="mb-1 block text-xs font-bold text-lumina-tinta">Estado</label>
+            <select
+              id="campo-estado"
+              formControlName="estado"
+              class="w-full rounded-xl border-2 border-lumina-tinta bg-white px-3 py-2.5 text-sm text-lumina-tinta focus:outline-none focus:ring-4 focus:ring-lumina-violeta/20"
+            >
+              <option value="Activo">Activo</option>
+              <option value="Inactivo">Inactivo</option>
+            </select>
+          </div>
+
+          <div class="sm:col-span-3">
+            <label for="campo-correo" class="mb-1 block text-xs font-bold text-lumina-tinta">Correo del estudiante</label>
+            <div class="relative">
+              <input
+                id="campo-correo"
+                type="email"
+                formControlName="correo"
+                autocomplete="off"
+                placeholder="nombre.apellido@sucolegio.edu"
+                [attr.aria-invalid]="!!error('correo')"
+                aria-describedby="error-correo"
+                class="w-full rounded-xl border-2 px-3 py-2.5 pr-28 text-sm text-lumina-tinta focus:outline-none focus:ring-4 focus:ring-lumina-violeta/20"
+                [class.border-red-600]="error('correo')"
+                [class.border-lumina-tinta]="!error('correo')"
+              />
+              @if (formulario.controls.correo.pending) {
+                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-lumina-texto" aria-live="polite">Verificando…</span>
+              } @else if (formulario.controls.correo.valid && formulario.controls.correo.dirty) {
+                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-lumina-violeta" aria-live="polite">✓ Disponible</span>
+              }
+            </div>
+            @if (error('correo'); as mensaje) {
+              <p id="error-correo" class="mt-1 text-xs font-semibold text-red-600">{{ mensaje }}</p>
+            }
+          </div>
+        </fieldset>
+
+        <!-- Representante -->
+        <fieldset class="grid gap-4 sm:grid-cols-2">
+          <legend class="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-lumina-tinta">Representante</legend>
+
+          <div>
+            <label for="campo-representante" class="mb-1 block text-xs font-bold text-lumina-tinta">Nombre y apellido</label>
+            <input
+              id="campo-representante"
+              type="text"
+              formControlName="representante"
+              autocomplete="off"
+              [attr.aria-invalid]="!!error('representante')"
+              aria-describedby="error-representante"
+              class="w-full rounded-xl border-2 px-3 py-2.5 text-sm text-lumina-tinta focus:outline-none focus:ring-4 focus:ring-lumina-violeta/20"
+              [class.border-red-600]="error('representante')"
+              [class.border-lumina-tinta]="!error('representante')"
+            />
+            @if (error('representante'); as mensaje) {
+              <p id="error-representante" class="mt-1 text-xs font-semibold text-red-600">{{ mensaje }}</p>
+            }
+          </div>
+
+          <div>
+            <label for="campo-telefonoRepresentante" class="mb-1 block text-xs font-bold text-lumina-tinta">Teléfono</label>
+            <input
+              id="campo-telefonoRepresentante"
+              type="tel"
+              formControlName="telefonoRepresentante"
+              placeholder="0414-555-0000"
+              [attr.aria-invalid]="!!error('telefonoRepresentante')"
+              aria-describedby="error-telefonoRepresentante"
+              class="w-full rounded-xl border-2 px-3 py-2.5 text-sm tabular-nums text-lumina-tinta focus:outline-none focus:ring-4 focus:ring-lumina-violeta/20"
+              [class.border-red-600]="error('telefonoRepresentante')"
+              [class.border-lumina-tinta]="!error('telefonoRepresentante')"
+            />
+            @if (error('telefonoRepresentante'); as mensaje) {
+              <p id="error-telefonoRepresentante" class="mt-1 text-xs font-semibold text-red-600">{{ mensaje }}</p>
+            }
+          </div>
+        </fieldset>
+
+        @if (errorServidor) {
+          <p class="rounded-xl border-2 border-red-600 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700" role="alert">
+            {{ errorServidor }}
+          </p>
+        }
+
+        <div class="flex flex-col-reverse gap-3 border-t-[3px] border-lumina-tinta pt-5 sm:flex-row sm:items-center sm:justify-end">
+          @if (sinCambios) {
+            <p class="text-xs text-lumina-texto sm:mr-auto">Todavía no hay cambios para guardar.</p>
+          }
+          <button
+            type="button"
+            (click)="cerrar()"
+            [disabled]="guardando"
+            class="rounded-full border-2 border-lumina-tinta px-5 py-2.5 text-xs font-bold uppercase text-lumina-tinta hover:bg-lumina-fondo disabled:opacity-50"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            [disabled]="guardando || sinCambios || formulario.pending"
+            class="rounded-full border-2 border-lumina-tinta bg-lumina-lima px-5 py-2.5 text-xs font-bold uppercase text-lumina-tinta hover:bg-lumina-lima-claro disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {{ guardando ? 'Guardando…' : esEdicion ? 'Guardar cambios' : 'Crear estudiante' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

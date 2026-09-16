@@ -1,0 +1,92 @@
+<div class="flex flex-col gap-4 rounded-2xl border-[3px] border-lumina-tinta bg-white p-4 sm:p-5">
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+    <label for="buscar-estudiante" class="sr-only">Buscar estudiante</label>
+    <div class="relative flex-1">
+      <svg class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-lumina-texto" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="2.2" />
+        <path d="M13.5 13.5L17 17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+      </svg>
+      <input
+        id="buscar-estudiante"
+        type="search"
+        [value]="texto"
+        (input)="textoCambio.emit($any($event.target).value)"
+        placeholder="Buscar por nombre, correo, documento o representante…"
+        autocomplete="off"
+        class="w-full rounded-full border-2 border-lumina-tinta bg-lumina-fondo py-2.5 pl-11 pr-4 text-sm text-lumina-tinta placeholder:text-lumina-texto/70 focus:outline-none focus:ring-4 focus:ring-lumina-violeta/25"
+      />
+    </div>
+    @if (hayFiltros) {
+      <button
+        type="button"
+        (click)="limpiar.emit()"
+        class="self-start whitespace-nowrap rounded-full px-3 py-2 text-xs font-bold uppercase tracking-wide text-lumina-violeta hover:bg-lumina-fondo sm:self-auto"
+      >
+        Limpiar filtros
+      </button>
+    }
+  </div>
+
+  <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+    <span class="w-16 shrink-0 text-[11px] font-bold uppercase tracking-[0.12em] text-lumina-texto" id="etiqueta-nivel">Nivel</span>
+    <div class="flex flex-wrap gap-2" role="group" aria-labelledby="etiqueta-nivel">
+      @for (opcion of niveles; track opcion.valor) {
+        <button
+          type="button"
+          (click)="nivelCambio.emit(opcion.valor)"
+          [attr.aria-pressed]="opcion.valor === nivelSeleccionado"
+          class="flex items-center gap-2 rounded-full border-2 border-lumina-tinta px-3.5 py-1.5 text-xs font-bold transition hover:border-lumina-violeta"
+          [class.bg-lumina-tinta]="opcion.valor === nivelSeleccionado"
+          [class.text-white]="opcion.valor === nivelSeleccionado"
+          [class.text-lumina-tinta]="opcion.valor !== nivelSeleccionado"
+        >
+          {{ opcion.etiqueta }}
+          <span
+            class="rounded-full px-1.5 text-[10px] tabular-nums"
+            [class.bg-lumina-lima]="opcion.valor === nivelSeleccionado"
+            [class.text-lumina-tinta]="opcion.valor === nivelSeleccionado"
+            [class.bg-lumina-fondo]="opcion.valor !== nivelSeleccionado"
+            >{{ opcion.cantidad }}</span
+          >
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (nivelSeleccionado !== 'Todos' && grados.length > 0) {
+    <div class="flex flex-col gap-2 border-t border-lumina-tinta/15 pt-4 sm:flex-row sm:items-center sm:gap-3">
+      <span class="w-16 shrink-0 text-[11px] font-bold uppercase tracking-[0.12em] text-lumina-texto" id="etiqueta-grado">Aula</span>
+      <div class="flex flex-wrap gap-2" role="group" aria-labelledby="etiqueta-grado">
+        <button
+          type="button"
+          (click)="gradoCambio.emit(null)"
+          [attr.aria-pressed]="gradoSeleccionado === null"
+          class="rounded-full border-2 px-3.5 py-1.5 text-xs font-bold transition"
+          [class.border-lumina-violeta]="gradoSeleccionado === null"
+          [class.bg-lumina-violeta]="gradoSeleccionado === null"
+          [class.text-white]="gradoSeleccionado === null"
+          [class.border-lumina-tinta]="gradoSeleccionado !== null"
+          [class.text-lumina-tinta]="gradoSeleccionado !== null"
+        >
+          Todas
+        </button>
+        @for (opcion of grados; track opcion.valor) {
+          <button
+            type="button"
+            (click)="gradoCambio.emit(opcion.valor)"
+            [attr.aria-pressed]="opcion.valor === gradoSeleccionado"
+            class="flex items-center gap-2 rounded-full border-2 px-3.5 py-1.5 text-xs font-bold transition"
+            [class.border-lumina-violeta]="opcion.valor === gradoSeleccionado"
+            [class.bg-lumina-violeta]="opcion.valor === gradoSeleccionado"
+            [class.text-white]="opcion.valor === gradoSeleccionado"
+            [class.border-lumina-tinta]="opcion.valor !== gradoSeleccionado"
+            [class.text-lumina-tinta]="opcion.valor !== gradoSeleccionado"
+          >
+            {{ opcion.etiqueta }}
+            <span class="text-[10px] tabular-nums opacity-70">{{ opcion.cantidad }}</span>
+          </button>
+        }
+      </div>
+    </div>
+  }
+</div>

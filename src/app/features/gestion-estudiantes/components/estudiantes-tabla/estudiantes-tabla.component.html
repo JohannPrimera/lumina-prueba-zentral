@@ -1,0 +1,91 @@
+<div class="overflow-x-auto rounded-2xl border-[3px] border-lumina-tinta bg-white">
+  <table class="w-full min-w-[860px] border-collapse text-left text-sm">
+    <caption class="sr-only">Listado de estudiantes</caption>
+    <thead>
+      <tr class="border-b-[3px] border-lumina-tinta text-[11px] font-bold uppercase tracking-[0.1em] text-lumina-texto">
+        <th scope="col" class="px-3 py-3">Estudiante</th>
+        <th scope="col" class="px-3 py-3">Aula</th>
+        <th scope="col" class="px-3 py-3">Documento</th>
+        <th scope="col" class="px-3 py-3">Representante</th>
+        <th scope="col" class="px-3 py-3">Estado</th>
+        <th scope="col" class="px-3 py-3 text-right">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (estudiante of estudiantes; track estudiante.id) {
+        <tr class="border-b border-lumina-tinta/10 last:border-b-0 hover:bg-lumina-fondo">
+          <td class="px-3 py-3">
+            <div class="flex items-center gap-3">
+              <span
+                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-lumina-tinta text-xs font-bold"
+                [class]="claseAvatar(estudiante.nivel)"
+                aria-hidden="true"
+                >{{ iniciales(estudiante.nombreCompleto) }}</span
+              >
+              <div class="min-w-0">
+                <p class="font-semibold text-lumina-tinta">{{ estudiante.nombreCompleto }}</p>
+                <p class="truncate text-xs text-lumina-texto">{{ estudiante.correo }}</p>
+              </div>
+            </div>
+          </td>
+          <td class="whitespace-nowrap px-3 py-3">
+            <p class="font-semibold text-lumina-tinta">{{ estudiante.grado }}</p>
+            <p class="text-xs text-lumina-texto">{{ estudiante.nivel }} · <span class="tabular-nums">{{ estudiante.fechaNacimiento | edad }} años</span></p>
+          </td>
+          <td class="whitespace-nowrap px-3 py-3 tabular-nums text-lumina-tinta/80">{{ estudiante.documento }}</td>
+          <td class="px-3 py-3">
+            <p class="whitespace-nowrap text-lumina-tinta">{{ estudiante.representante }}</p>
+            <p class="whitespace-nowrap text-xs tabular-nums text-lumina-texto">{{ estudiante.telefonoRepresentante }}</p>
+          </td>
+          <td class="px-3 py-3">
+            <span
+              class="whitespace-nowrap rounded-full border-2 border-lumina-tinta px-2.5 py-0.5 text-xs font-bold"
+              [class.bg-lumina-lima]="estudiante.estado === 'Activo'"
+              [class.text-lumina-tinta]="estudiante.estado === 'Activo'"
+              [class.bg-lumina-fondo]="estudiante.estado === 'Inactivo'"
+              [class.text-lumina-texto]="estudiante.estado === 'Inactivo'"
+            >
+              {{ estudiante.estado }}
+            </span>
+          </td>
+          <td class="whitespace-nowrap px-3 py-3 text-right">
+            <button
+              type="button"
+              (click)="editar.emit(estudiante)"
+              [attr.aria-label]="'Editar a ' + estudiante.nombreCompleto"
+              class="mr-2 rounded-full border-2 border-lumina-tinta px-3 py-1 text-xs font-bold text-lumina-tinta transition hover:bg-lumina-tinta hover:text-white"
+            >
+              Editar
+            </button>
+            <button
+              type="button"
+              (click)="eliminar.emit(estudiante)"
+              [attr.aria-label]="'Eliminar a ' + estudiante.nombreCompleto"
+              class="rounded-full border-2 border-lumina-tinta/25 px-3 py-1 text-xs font-bold text-lumina-texto transition hover:border-red-600 hover:text-red-600"
+            >
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="7" class="px-4 py-14 text-center">
+            <p class="font-display text-xl uppercase text-lumina-tinta">Sin resultados</p>
+            <p class="mt-1 text-sm text-lumina-texto">
+              {{ hayFiltros ? 'Ningún estudiante coincide con la búsqueda o los filtros.' : 'Todavía no hay estudiantes en esta aula.' }}
+            </p>
+            @if (hayFiltros) {
+              <button
+                type="button"
+                (click)="limpiarFiltros.emit()"
+                class="mt-4 rounded-full border-2 border-lumina-tinta px-4 py-2 text-xs font-bold uppercase tracking-wide text-lumina-tinta hover:bg-lumina-tinta hover:text-white"
+              >
+                Limpiar filtros
+              </button>
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
