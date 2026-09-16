@@ -1,25 +1,38 @@
-# Lúmina · Prueba técnica Zentral (Fase 1 + Fase 2)
+# Lúmina · Prueba técnica Zentral
 
 Una sola aplicación Angular que junta las dos fases de la prueba:
 
 | Ruta | Pantalla | Fase |
 |---|---|---|
-| `/` | Landing institucional v4 («Aprender jugando») | Fase 1 · diseño |
+| `/` | Landing institucional («Aprender jugando») | Fase 1 · diseño |
 | `/docente/estudiantes` | Panel del docente → Gestión de Estudiantes (CRUD) | Fase 2 · desarrollo |
 
-Desde la landing se entra al panel por: **Panel docente** (header y footer),
-la tarjeta **Docentes → Abrir panel docente** y el botón **Probar el panel docente**.
-Desde el panel se vuelve con **Volver al sitio**.
+Desde la landing se entra al panel por **Panel docente** (header y footer), la
+tarjeta **Docentes → Abrir panel docente** o el botón **Probar el panel
+docente**. Desde el panel se vuelve con **Volver al sitio**.
+
+## Requisitos
+
+- Node ^22.22.3, ^24.15.0 o ≥26.0.0 (lo que pide Angular CLI 22)
+- npm ≥8
 
 ## Cómo correrlo
 
 ```bash
-cd zentral-gestion-estudiantes
 npm install
 npm start
 ```
 
 Abre en `http://localhost:4200`.
+
+Otros comandos:
+
+```bash
+npm run build   # build de producción → dist/zentral-gestion-estudiantes
+npm run watch   # build de desarrollo en watch mode
+```
+
+No hay test runner configurado (sin Karma/Jasmine ni specs) — `ng test` no aplica.
 
 ## Estructura
 
@@ -86,7 +99,7 @@ Para conectar los endpoints de Zentral:
 
 ```ts
 // app.config.ts
-provideHttpClient(withInterceptors([/* quitar estudiantesFakeBackendInterceptor */])),
+provideHttpClient(withXhr() /* quitar withInterceptors([estudiantesFakeBackendInterceptor]) */),
 { provide: API_URL, useValue: 'https://<url-de-zentral>' },
 ```
 
