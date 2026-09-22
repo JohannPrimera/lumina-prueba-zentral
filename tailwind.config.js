@@ -15,6 +15,19 @@ module.exports = {
           'lima-claro': '#C9F047', // hover de CTA
           texto: '#463E68', // texto secundario
         },
+
+        // Paleta ampliada de la landing (modo Niño). NO reemplaza a
+        // `lumina.*`: la extiende. Todos estos tonos están calibrados para
+        // llevar `lumina.tinta` encima (contraste AA), nunca texto blanco.
+        'lumina-kids': {
+          crema: '#FFF7E8', // campo cálido del modo Niño
+          coral: '#FF6B4A', // acento de acción
+          'coral-claro': '#FF8869', // hover del acento
+          sol: '#FFC833', // recompensa / insignias
+          cielo: '#41C9F2', // acento secundario
+          menta: '#3ED292', // progreso completado
+          uva: '#7B4DFF', // hermano saturado de lumina.violeta
+        },
       },
       fontFamily: {
         display: ['Anton', 'sans-serif'],

@@ -1,0 +1,275 @@
+/* Curvas (las built-in de CSS son demasiado débiles para UI) y la lista de
+   propiedades del cambio de modo, escrita una sola vez y nombrada una por una. */
+.pb {
+  --sal: cubic-bezier(0.23, 1, 0.32, 1);
+  --entra-sale: cubic-bezier(0.77, 0, 0.175, 1);
+  --morf: background-color, border-color, border-width, border-radius, box-shadow, color, fill, stroke,
+    font-size, letter-spacing, padding, gap;
+  display: block;
+  background-color: var(--campo);
+  background-image: radial-gradient(var(--punto) 2px, transparent 2.5px);
+  background-size: 26px 26px;
+  color: var(--tinta);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: var(--cuerpo);
+}
+
+/*
+ * Misma tipografía y misma paleta en los dos modos — a propósito: son una sola
+ * marca leída de dos formas, no dos sitios. Anton para titulares, Instrument
+ * Serif itálica para el acento, Space Grotesk para el cuerpo: las tres ya
+ * cargadas globalmente (index.html), ninguna fuente nueva por modo.
+ *
+ * Lo gamificado vive en la FORMA, no en el color ni en la letra: trazo,
+ * radio, sombra, escala tipográfica y densidad. Por eso todos los tokens de
+ * color de acá abajo son literalmente los mismos en los dos bloques; solo
+ * cambian los tokens de forma y tamaño.
+ */
+:root,
+.pb {
+  --sup: #ffffff;
+  --campo: #f3f1fb; /* lumina.fondo */
+  --campo-alt: #eae6f7;
+  --tinta: #241e3d; /* lumina.tinta */
+  --sutil: #463e68; /* lumina.texto */
+  --linea: #241e3d;
+  --acento: #5b3ae0; /* lumina.violeta */
+  --acento-hover: #4c2fc7;
+  --acento-tinta: #ffffff;
+  --acento-texto: #5b3ae0; /* 6.7:1 sobre blanco */
+  --acento-2: #41c9f2; /* lumina-kids.cielo */
+  --acento-3: #dcd6f5;
+  --exito: #3ed292; /* lumina-kids.menta */
+  --premio: #ffc833; /* lumina-kids.sol */
+  --oscuro: #1b1436; /* lumina.noche */
+  --oscuro-tinta: #ffffff;
+  --anillo: rgba(91, 58, 224, 0.5);
+}
+
+/* MODO NIÑO · el mundo de juego: campo punteado, trazo de 4px, botones 3D con
+   canto inferior duro, escala tipográfica grande. Misma paleta de arriba. */
+.pb[data-modo='nino'] {
+  --punto: rgba(36, 30, 61, 0.1);
+  --borde: 4px;
+  --radio: 28px;
+  --radio-sm: 18px;
+  --sombra: 0 8px 0 0 var(--tinta);
+  --sombra-sm: 0 5px 0 0 var(--tinta);
+  --sombra-hover: 0 2px 0 0 var(--tinta);
+  --h1: clamp(54px, 11vw, 140px);
+  --h2: clamp(36px, 5.6vw, 68px);
+  --h3: clamp(22px, 2.4vw, 30px);
+  --cuerpo: clamp(17px, 1.3vw, 20px);
+  --micro: 12px;
+  --pad-y: clamp(64px, 8vw, 112px);
+  --gap: 24px;
+  --alto-titulo: 0.95;
+}
+.pb[data-modo='nino'] h1 {
+  text-shadow: 0 5px 0 var(--premio);
+}
+
+/* MODO DOCENTE · otra lectura del mismo contenido: la jerarquía pasa del
+   color a la densidad. Trazo de 1px, sombra suave, escala más chica. */
+.pb[data-modo='docente'] {
+  --punto: transparent;
+  --borde: 1px;
+  --radio: 14px;
+  --radio-sm: 10px;
+  --sombra: 0 1px 2px rgba(36, 30, 61, 0.06), 0 16px 34px -24px rgba(36, 30, 61, 0.5);
+  --sombra-sm: 0 1px 2px rgba(36, 30, 61, 0.06);
+  --sombra-hover: 0 1px 2px rgba(36, 30, 61, 0.08), 0 20px 38px -24px rgba(36, 30, 61, 0.55);
+  --h1: clamp(38px, 5vw, 72px);
+  --h2: clamp(26px, 3.2vw, 44px);
+  --h3: clamp(18px, 1.5vw, 22px);
+  --cuerpo: clamp(15px, 1vw, 17px);
+  --micro: 11px;
+  --pad-y: clamp(48px, 5vw, 80px);
+  --gap: 16px;
+  --alto-titulo: 1;
+}
+
+/* El cambio de modo. Propiedades nombradas: nunca `transition: all`. */
+.pb .pb-morf {
+  transition-property: var(--morf);
+  transition-duration: 320ms;
+  transition-timing-function: var(--entra-sale);
+}
+/* El pulgar del conmutador se desliza por transform (no por left). */
+.pb .pb-pulgar {
+  transition-property: transform, background-color;
+  transition-duration: 260ms, 320ms;
+  transition-timing-function: var(--entra-sale);
+}
+
+/* Entrada escalonada (revelar.directive.ts). Animación CSS, una sola vez.
+   `backwards` y no `both`: el fill final pisaría el transform del hover. */
+.pb .pb-revelar {
+  opacity: 0;
+}
+.pb .pb-revelar.pb-visible {
+  opacity: 1;
+  animation: pb-entrar 460ms var(--sal) backwards;
+  animation-delay: var(--retraso, 0ms);
+}
+@keyframes pb-entrar {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+/* Recompensa al abrir un mundo. */
+@keyframes pb-premio {
+  0% {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+.pb .pb-premiado {
+  animation: pb-premio 220ms var(--sal) both;
+}
+
+/* Flotación de la mascota y de las estrellas (solo modo Niño). */
+@keyframes pb-flotar {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1.5deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+}
+.pb[data-modo='nino'] .pb-flotar {
+  animation: pb-flotar 7s ease-in-out infinite;
+}
+
+/* Un solo anillo de foco para toda la propuesta. */
+.pb .pb-foco:focus-visible {
+  outline: 3px solid var(--anillo);
+  outline-offset: 3px;
+}
+.pb .pb-saltar {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 60;
+  background: var(--sup);
+  color: var(--tinta);
+  border: var(--borde) solid var(--linea);
+  padding: 10px 18px;
+  font-size: var(--micro);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.pb .pb-saltar:focus {
+  left: 16px;
+  top: 16px;
+}
+
+/* Botones y tarjetas 3D: en modo Niño se hunden contra su propio canto.
+   Gated: en táctil un toque dejaría la tarjeta trabada en estado hundido. */
+@media (hover: hover) and (pointer: fine) {
+  .pb .pb-alzar {
+    transition-property: var(--morf), transform;
+  }
+  .pb .pb-alzar:hover {
+    transition-duration: 180ms;
+    transition-timing-function: var(--sal);
+    transform: translateY(3px);
+    box-shadow: var(--sombra-hover);
+  }
+  .pb[data-modo='docente'] .pb-alzar:hover {
+    transform: translateY(-2px);
+  }
+}
+.pb[data-modo='nino'] .pb-alzar:active {
+  transform: translateY(6px);
+  box-shadow: 0 0 0 0 var(--linea);
+}
+
+/* Piezas de juego, solo modo Niño. */
+.pb[data-modo='nino'] .pb-sticker:nth-child(odd) {
+  rotate: -1.2deg;
+}
+.pb[data-modo='nino'] .pb-sticker:nth-child(even) {
+  rotate: 1.2deg;
+}
+.pb[data-modo='nino'] .pb-inclinar {
+  rotate: -3deg;
+}
+.pb[data-modo='nino'] .pb-xp {
+  background-image: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.5) 0 7px, transparent 7px 14px);
+}
+.pb[data-modo='nino'] .pb-confeti {
+  background-image: radial-gradient(circle at 5% 12%, var(--premio) 0 9px, transparent 10px),
+    radial-gradient(circle at 94% 9%, var(--acento) 0 7px, transparent 8px),
+    radial-gradient(circle at 12% 90%, var(--acento-2) 0 8px, transparent 9px),
+    radial-gradient(circle at 88% 86%, var(--exito) 0 10px, transparent 11px),
+    radial-gradient(circle at 52% 5%, var(--acento-3) 0 6px, transparent 7px),
+    radial-gradient(circle at 47% 96%, var(--premio) 0 6px, transparent 7px);
+}
+/* Globo de diálogo: cita del testimonio. */
+.pb .pb-burbuja {
+  position: relative;
+}
+.pb .pb-burbuja::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -15px;
+  width: 26px;
+  height: 26px;
+  background: var(--sup);
+  border-right: var(--borde) solid var(--linea);
+  border-bottom: var(--borde) solid var(--linea);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+/* En móvil el lema del logotipo se compacta (no se oculta): el conmutador necesita el ancho. */
+@media (max-width: 639px) {
+  .pb .pb-logo-corto > span > span:last-child {
+    font-size: 8px;
+    letter-spacing: 0.1em;
+  }
+}
+
+/* Movimiento reducido: menos y más suave, no cero. Se conservan los cambios
+   de color y opacidad (comunican estado); no queda ningún desplazamiento. */
+@media (prefers-reduced-motion: reduce) {
+  .pb .pb-revelar.pb-visible {
+    animation: pb-aparecer 200ms ease backwards;
+    animation-delay: 0ms;
+  }
+  @keyframes pb-aparecer {
+    from {
+      opacity: 0;
+    }
+  }
+  .pb .pb-premiado {
+    animation: pb-aparecer 160ms ease both;
+  }
+  .pb[data-modo] .pb-flotar {
+    animation: none;
+  }
+  .pb[data-modo] .pb-alzar:hover,
+  .pb[data-modo] .pb-alzar:active {
+    transform: none;
+  }
+  .pb .pb-morf {
+    transition-duration: 1ms;
+  }
+  .pb .pb-pulgar {
+    transition-property: background-color;
+    transition-duration: 1ms;
+  }
+}

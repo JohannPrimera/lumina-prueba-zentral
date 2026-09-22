@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 /**
  * Rutas de la aplicación.
  *
- *  /                         → Landing institucional (Fase 1 · landing v4)
+ *  /                         → Landing (modo Niño / modo Docente)
  *  /docente                  → Panel del docente (layout con navegación)
  *  /docente/estudiantes      → Gestión de Estudiantes (Fase 2 · CRUD)
  *
